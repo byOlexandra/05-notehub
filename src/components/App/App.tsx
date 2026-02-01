@@ -14,7 +14,7 @@ export default function App() {
 
 
     const { data, isLoading } = useQuery({
-        queryKey: ['noteList', searchQuery, currentPage],
+        queryKey: ['notes', searchQuery, currentPage],
         queryFn: () => fetchNotes(searchQuery, currentPage)
     })
 

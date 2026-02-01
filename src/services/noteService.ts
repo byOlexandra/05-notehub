@@ -37,7 +37,21 @@ export async function createNote(noteData: Note) {
     return data;
 }
 
+interface DeleteNoteResponse {
+    note: Note;
+}
+
 export async function deleteNote(id: string) {
-    const { data } = await axios.delete<Note>(`/notes/${id}`);
-    return data
+    try {
+        const { data } = await axios.delete<DeleteNoteResponse>(`/notes/${id}`, {
+            headers: {
+                Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`
+            }
+        });
+        return data
+
+    } catch (error) {
+        console.log(error)
+    }
+
 }
