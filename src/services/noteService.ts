@@ -30,7 +30,7 @@ export async function fetchNotes(query: string, page: number): Promise<FetchNote
     }
 }
 
-interface CreateNoteResponse {
+export interface CreateNoteResponse {
     title: string;
     content: string;
     tag: string
