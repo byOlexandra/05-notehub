@@ -4,10 +4,11 @@ import axios from "axios";
 axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
 
 interface FetchNotesResponse {
-    notes: Note[]
+    notes: Note[],
+    totalPages: number;
 }
 
-export async function fetchNotes(query: string, page: number): Promise<Note[]> {
+export async function fetchNotes(query: string, page: number): Promise<FetchNotesResponse> {
     try {
         const { data } = await axios.get<FetchNotesResponse>("/notes", {
             params: {
@@ -19,7 +20,10 @@ export async function fetchNotes(query: string, page: number): Promise<Note[]> {
             }
         })
         console.log(data)
-        return data.notes || [];
+        return {
+            notes: data.notes || [],
+            totalPages: data.totalPages || 1
+        }
     } catch (error) {
         console.error("Помилка при завантаженні нотаток:", error);
         throw error;
