@@ -30,14 +30,14 @@ export async function fetchNotes(query: string, page: number): Promise<FetchNote
     }
 }
 
-export interface CreateNoteResponse {
-    title: string;
-    content: string;
-    tag: string
-}
+export type CreateNoteInForm = Omit<Note, "id" | "createdAt" | "updatedAt">;
 
-export async function createNote(noteData: Note) {
-    const { data } = await axios.post<CreateNoteResponse>("/notes", noteData);
+export async function createNote(noteData: CreateNoteInForm) {
+    const { data } = await axios.post<Note>("/notes", noteData, {
+        headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`
+        }
+    });
     return data;
 }
 

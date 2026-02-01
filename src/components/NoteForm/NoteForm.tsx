@@ -1,8 +1,9 @@
 import css from "./NoteForm.module.css";
-import { Formik, type FormikHelpers, Field, ErrorMessage } from "formik";
+import { Formik, type FormikHelpers, Field, ErrorMessage, Form } from "formik";
 import { createNote } from "../../services/noteService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Note } from "../../types/note";
+import { type CreateNoteInForm } from "../../services/noteService";
+import * as Yup from "yup";
 
 interface NoteFormProps {
     onClose: () => void;
@@ -17,8 +18,21 @@ interface NoteFormValues {
 const initialValues: NoteFormValues = {
     title: "",
     content: "",
-    tag: "ToDo",
+    tag: "Todo",
 };
+
+const tags = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];
+
+const noteFormSchema = Yup.object().shape({
+    title: Yup.string()
+        .min(3, "Minimum 3 letters")
+        .max(50, 'Maximum 50 letters')
+        .required("Title is required"),
+    content: Yup.string().max(200, "500 letters is maximum").required('Content is required'),
+    tag: Yup.string()
+        .oneOf(tags)
+        .required('Tag is required')
+});
 
 export default function NoteForm({ onClose }: NoteFormProps) {
     const queryClient = useQueryClient();
@@ -32,19 +46,24 @@ export default function NoteForm({ onClose }: NoteFormProps) {
         },
     });
     const handleSubmit = (
-        values: Note,
+        values: CreateNoteInForm,
         actions: FormikHelpers<NoteFormValues>,
     ) => {
         createMutate(values, {
             onSuccess: () => {
                 actions.resetForm();
+                onClose()
             },
         });
     };
 
     return (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-            <form className={css.form}>
+        <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={noteFormSchema}
+        >
+            <Form className={css.form}>
                 <div className={css.formGroup}>
                     <label htmlFor="title">Title</label>
                     <Field id="title" type="text" name="title" className={css.input} />
@@ -83,7 +102,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
                         Create note
                     </button>
                 </div>
-            </form>
+            </Form>
         </Formik>
     );
 }
