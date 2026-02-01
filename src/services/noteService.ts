@@ -1,15 +1,17 @@
 import type { Note } from "../types/note";
 import axios from "axios";
 
+axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
+
 interface FetchNotesResponse {
     results: Note[]
 }
 
 export async function fetchNotes(query: string, page: number): Promise<Note[]> {
-    const response = await axios.get<FetchNotesResponse>('https://notehub-public.goit.study/api/notes', {
+    const response = await axios.get<FetchNotesResponse>("/notes", {
         params: {
-            query,
-            page,
+            query: query,
+            page: page,
         },
         headers: {
             Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`
@@ -18,4 +20,14 @@ export async function fetchNotes(query: string, page: number): Promise<Note[]> {
 
     const results = response.data.results;
     return results
+}
+
+export async function createNote(noteData: Note) {
+    const { data } = await axios.post<Note>("/notes", noteData);
+    return data;
+}
+
+export async function deleteNote({ id }: Note) {
+    const { data } = await axios.delete(`/notes/${id}`);
+    return data
 }
