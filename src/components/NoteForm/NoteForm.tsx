@@ -28,7 +28,7 @@ const noteFormSchema = Yup.object().shape({
         .min(3, "Minimum 3 letters")
         .max(50, 'Maximum 50 letters')
         .required("Title is required"),
-    content: Yup.string().max(500, "500 letters is maximum").required('Content is required'),
+    content: Yup.string().max(500, "500 letters is maximum"),
     tag: Yup.string()
         .oneOf(tags)
         .required('Tag is required')
