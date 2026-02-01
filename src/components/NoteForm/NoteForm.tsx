@@ -28,7 +28,7 @@ const noteFormSchema = Yup.object().shape({
         .min(3, "Minimum 3 letters")
         .max(50, 'Maximum 50 letters')
         .required("Title is required"),
-    content: Yup.string().max(200, "500 letters is maximum").required('Content is required'),
+    content: Yup.string().max(500, "500 letters is maximum").required('Content is required'),
     tag: Yup.string()
         .oneOf(tags)
         .required('Tag is required')
@@ -67,7 +67,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
                 <div className={css.formGroup}>
                     <label htmlFor="title">Title</label>
                     <Field id="title" type="text" name="title" className={css.input} />
-                    <ErrorMessage name="title" className={css.error} />
+                    <ErrorMessage component="span" name="title" className={css.error} />
                 </div>
 
                 <div className={css.formGroup}>
@@ -79,7 +79,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
                         rows={8}
                         className={css.textarea}
                     />
-                    <ErrorMessage name="content" className={css.error} />
+                    <ErrorMessage component="span" name="content" className={css.error} />
                 </div>
 
                 <div className={css.formGroup}>
@@ -91,7 +91,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
                         <option value="Meeting">Meeting</option>
                         <option value="Shopping">Shopping</option>
                     </Field>
-                    <ErrorMessage name="tag" className={css.error} />
+                    <ErrorMessage component="span" name="tag" className={css.error} />
                 </div>
 
                 <div className={css.actions}>

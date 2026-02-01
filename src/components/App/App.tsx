@@ -14,7 +14,10 @@ import { keepPreviousData } from "@tanstack/react-query";
 export default function App() {
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const debouncedSetSearchQuery = useDebouncedCallback(setSearchQuery, 300);
+    const debouncedSetSearchQuery = useDebouncedCallback((value: string) => {
+        setSearchQuery(value)
+        setCurrentPage(1);
+    }, 300);
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     const openModal = () => setIsOpenModal(true);
