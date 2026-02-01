@@ -53,7 +53,6 @@ export async function deleteNote(id: string) {
             }
         });
         return data
-
     } catch (error) {
         console.log(error)
     }
