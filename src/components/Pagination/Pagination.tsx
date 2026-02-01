@@ -1,7 +1,6 @@
 import css from './Pagination.module.css'
 import ReactPaginate from 'react-paginate'
 
-
 interface PaginationProps {
     totalPg: number;
     changePage: (page: number) => void;
