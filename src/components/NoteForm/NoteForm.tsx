@@ -39,6 +39,9 @@ export default function NoteForm({ onClose }: NoteFormProps) {
 
     const { mutate: createMutate } = useMutation({
         mutationFn: createNote,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['notes'] });
+        },
     });
     const handleSubmit = (
         values: CreateNoteInForm,
@@ -46,9 +49,8 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     ) => {
         createMutate(values, {
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['notes'] })
                 actions.resetForm();
-                onClose()
+                onClose();
             },
         });
     };
