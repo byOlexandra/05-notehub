@@ -5,12 +5,12 @@ import NoteForm from "../NoteForm/NoteForm";
 import Modal from "../Modal/Modal";
 import Pagination from "../Pagination/Pagination";
 import Loader from "../Loader/Loader";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNotes } from "../../services/noteService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { keepPreviousData } from "@tanstack/react-query";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function App() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -30,6 +30,10 @@ export default function App() {
         placeholderData: keepPreviousData,
     });
 
+    useEffect(() => {
+        if (isError) toast.error('Somehing bad happenned. Try again.')
+    }, [isError])
+
     const notes = data?.notes || [];
     const totalPages = data?.totalPages || 0;
 
@@ -48,8 +52,8 @@ export default function App() {
                     Create note +
                 </button>
             </header>
+            <Toaster />
             {isFetching && <Loader />}
-            {isError && <ErrorMessage />}
             {notes.length > 0 && (
                 <NoteList notes={notes} />
             )}
