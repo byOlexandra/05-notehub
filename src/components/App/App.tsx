@@ -5,6 +5,7 @@ import NoteForm from "../NoteForm/NoteForm";
 import Modal from "../Modal/Modal";
 import Pagination from "../Pagination/Pagination";
 import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNotes } from "../../services/noteService";
 import { useState } from "react";
@@ -23,7 +24,7 @@ export default function App() {
     const openModal = () => setIsOpenModal(true);
     const closeModal = () => setIsOpenModal(false);
 
-    const { data, isFetching } = useQuery({
+    const { data, isFetching, isError } = useQuery({
         queryKey: ["notes", searchQuery, currentPage],
         queryFn: () => fetchNotes(searchQuery, currentPage),
         placeholderData: keepPreviousData,
@@ -48,6 +49,7 @@ export default function App() {
                 </button>
             </header>
             {isFetching && <Loader />}
+            {isError && <ErrorMessage />}
             {notes.length > 0 && (
                 <NoteList notes={notes} />
             )}
